@@ -1,7 +1,6 @@
 
 
-# 
-Proyecto Express
+# Proyecto Express
 
 Este proyecto es una aplicación web construida con Node.js y Express.js. Se trata de una API REST que proporciona rutas para interactuar con recursos de usuarios y tarjetas.
 Tecnologías utilizadas
