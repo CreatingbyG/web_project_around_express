@@ -1,6 +1,7 @@
-# Tripleten web_project_around_express
 
-# Mi Proyecto Express
+
+# 
+Proyecto Express
 
 Este proyecto es una aplicación web construida con Node.js y Express.js. Se trata de una API REST que proporciona rutas para interactuar con recursos de usuarios y tarjetas.
 Tecnologías utilizadas
@@ -21,6 +22,7 @@ Rutas
 Ejecución del servidor
 
 El servidor se ejecuta en el puerto definido por la variable de entorno PORT. Si no se define, el puerto predeterminado es 3000. Cuando el servidor está en funcionamiento, se puede acceder a él en http://localhost:${PORT}.
-Manejo de errores
+
+- Manejo de errores
 
 Si se solicita un recurso que no existe, la aplicación devuelve un error 404 con el mensaje 'Recurso solicitado no encontrado'.
