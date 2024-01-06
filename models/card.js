@@ -5,6 +5,13 @@ const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    validate: {
+      validator: function(v) {
+        // Esta es una expresión regular que permite solo letras, números y espacios
+        return /^[a-zA-Z0-9 ]+$/.test(v);
+      },
+      message: props => `${props.value} is not a valid card name!`
+    },
     minlength: 2,
     maxlength: 30
   },
