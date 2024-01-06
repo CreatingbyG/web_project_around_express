@@ -1,18 +1,32 @@
-const User = require('../models/user');
+const Card = require('../models/card');
 
-module.exports.getUsers = async (req, res) => {
-  const users = await User.find({});
-  res.send(users);
+module.exports.getCards = async (req, res) => {
+  const cards = await Card.find({});
+  res.send(cards);
 };
 
-module.exports.getUserById = async (req, res) => {
-  const user = await User.findById(req.params.userId);
-  res.send(user);
+module.exports.createCard = async (req, res) => {
+  try {
+    const { name, link } = req.body;
+    const owner = req.user._id;
+    const card = new Card({ name, link, owner });
+    console.log(req.user._id);
+    await card.save();
+    res.send(card);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 };
 
-module.exports.createUser = async (req, res) => {
-  const { name, about, avatar } = req.body;
-  const user = new User({ name, about, avatar });
-  await user.save();
-  res.send(user);
+module.exports.deleteCard = async (req, res) => {
+  try {
+    const card = await Card.findByIdAndRemove(req.params.cardId);
+    if (!card) {
+      res.status(404).send({ message: 'Card not found' });
+    } else {
+      res.send(card);
+    }
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 };

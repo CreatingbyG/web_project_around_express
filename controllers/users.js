@@ -11,8 +11,12 @@ module.exports.getUserById = async (req, res) => {
 };
 
 module.exports.createUser = async (req, res) => {
-  const { name, about, avatar } = req.body;
-  const user = new User({ name, about, avatar });
-  await user.save();
-  res.send(user);
+  try {
+    const { name, about, avatar } = req.body;
+    const user = new User({ name, about, avatar });
+    await user.save();
+    res.send(user);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 };
