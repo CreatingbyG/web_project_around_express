@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 app.use(express.json());
 app.use((req, res, next) => {
   req.user = {
-    _id: '65961518bf2c3861f4099be4' // pega el _id del usuario de prueba que creamos en el paso anterior
+    _id: '65961518bf2c3861f4099be4'
   };
   next();
 });

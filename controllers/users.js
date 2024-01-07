@@ -39,3 +39,25 @@ module.exports.createUser = async (req, res, next) => {
     }
   }
 };
+
+module.exports.updateProfile = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const update = req.body; // Asegúrate de validar y limpiar este objeto antes de usarlo
+    const user = await User.findByIdAndUpdate(userId, update, { new: true });
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateAvatar = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const { avatar } = req.body; // Asegúrate de validar y limpiar este valor antes de usarlo
+    const user = await User.findByIdAndUpdate(userId, { avatar }, { new: true });
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+};

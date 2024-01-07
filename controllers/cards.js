@@ -50,3 +50,30 @@ module.exports.deleteCard = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.likeCard = async (req, res, next) => {
+  try {
+    const card = await Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $addToSet: { likes: req.user._id } },
+      { new: true }
+    );
+    res.send(card);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Dar unlike a una tarjeta
+module.exports.dislikeCard = async (req, res, next) => {
+  try {
+    const card = await Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $pull: { likes: req.user._id } }, // elimina _id del array
+      { new: true }
+    );
+    res.send(card);
+  } catch (error) {
+    next(error);
+  }
+};
