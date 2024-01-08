@@ -1,6 +1,6 @@
 const User = require("../models/user");
 
-module.exports.getUsers = async (req, res, next) => {
+const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
     res.send(users);
@@ -9,7 +9,7 @@ module.exports.getUsers = async (req, res, next) => {
   }
 };
 
-module.exports.getUserById = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId).orFail(
       new Error("Usario no encontrado")
@@ -20,7 +20,7 @@ module.exports.getUserById = async (req, res, next) => {
   }
 };
 
-module.exports.createUser = async (req, res, next) => {
+const createUser = async (req, res, next) => {
   try {
     const { name, about, avatar } = req.body;
     if (
@@ -28,7 +28,6 @@ module.exports.createUser = async (req, res, next) => {
       typeof about !== "string" ||
       (avatar && typeof avatar !== "string")
     ) {
-      // Si la validación falla, lanza un error con un mensaje descriptivo
       throw new Error("Datos invalidos");
     }
 
@@ -44,7 +43,7 @@ module.exports.createUser = async (req, res, next) => {
   }
 };
 
-module.exports.updateProfile = async (req, res, next) => {
+const updateProfile = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const update = req.body;
@@ -55,7 +54,7 @@ module.exports.updateProfile = async (req, res, next) => {
   }
 };
 
-module.exports.updateAvatar = async (req, res, next) => {
+const updateAvatar = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { avatar } = req.body;
@@ -68,4 +67,12 @@ module.exports.updateAvatar = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  getUsers,
+  getUserById,
+  createUser,
+  updateProfile,
+  updateAvatar
 };

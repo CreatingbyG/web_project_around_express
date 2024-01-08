@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Card = require("../models/card");
 
-module.exports.getCards = async (req, res, next) => {
+const getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({}).orFail(new Error("Carta no encontrada"));
     res.send(cards);
@@ -10,12 +10,11 @@ module.exports.getCards = async (req, res, next) => {
   }
 };
 
-module.exports.createCard = async (req, res, next) => {
+const createCard = async (req, res, next) => {
   try {
     const { name, link } = req.body;
     const owner = req.user._id;
     if (typeof name !== "string") {
-      // Si la validación falla, lanza un error con un mensaje descriptivo
       throw new Error("Datos Invalidos");
     }
     const card = new Card({ name, link, owner });
@@ -26,7 +25,7 @@ module.exports.createCard = async (req, res, next) => {
   }
 };
 
-module.exports.deleteCard = async (req, res, next) => {
+const deleteCard = async (req, res, next) => {
   try {
     const card = await Card.findById(req.params.cardId).orFail(() => {
       const error = new Error("Carta no encontrada");
@@ -34,7 +33,6 @@ module.exports.deleteCard = async (req, res, next) => {
       throw error;
     });
 
-    // Convertir req.user._id a ObjectId si es necesario
     const userId =
       typeof req.user._id === "string"
         ? new mongoose.Types.ObjectId(req.user._id)
@@ -54,7 +52,7 @@ module.exports.deleteCard = async (req, res, next) => {
   }
 };
 
-module.exports.likeCard = async (req, res, next) => {
+const likeCard = async (req, res, next) => {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
@@ -67,16 +65,23 @@ module.exports.likeCard = async (req, res, next) => {
   }
 };
 
-// Dar unlike a una tarjeta
-module.exports.dislikeCard = async (req, res, next) => {
+const dislikeCard = async (req, res, next) => {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $pull: { likes: req.user._id } }, // elimina _id del array
+      { $pull: { likes: req.user._id } },
       { new: true }
     );
     res.send(card);
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  getCards,
+  createCard,
+  deleteCard,
+  likeCard,
+  dislikeCard
 };
