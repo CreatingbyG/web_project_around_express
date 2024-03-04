@@ -6,15 +6,12 @@ const { PORT = 3000 } = process.env;
 const mongoose = require("mongoose");
 
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: "65961518bf2c3861f4099be4",
-  };
-  next();
-});
 
 app.use("/users", userRoutes);
 app.use("/cards", cardRoutes);
+
+
+
 
 mongoose.connect("mongodb://127.0.0.1:27017/aroundb", {
   useNewUrlParser: true,
