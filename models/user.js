@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator")
-const urlRegex = /^(http|https):\/\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: "",
+    default: "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
   },
   email: {
     type: String,
@@ -38,3 +38,5 @@ userSchema.pre('save', async function(next) {
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+
+
