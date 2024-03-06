@@ -44,11 +44,13 @@ const createUser = async (req, res, next) => {
       throw new Error("Email y contraseña son requeridos");
     }
 
-    const user = new User({ name, about, avatar, email, password });
+    const hashedPassword = await bcrypt.hash(password, 12); // 12 es el número de rondas de sal
+    const user = new User({ name, about, avatar, email, password: hashedPassword });
     await user.save();
     res.status(201).send({user: user._id});
+    console.log('Usuario creado')
   } catch (error) {
-    if (error.message === 11000) {
+    if (error.name === 'MongoError' && error.code === 11000) {
       res.status(400).send({ message: "El email ya esta en uso" });
     } else {
       next(error);

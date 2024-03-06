@@ -4,6 +4,9 @@ const userRoutes = require("./routes/users");
 const cardRoutes = require("./routes/cards");
 const { PORT = 3000 } = process.env;
 const mongoose = require("mongoose");
+const errorHandler = require('./middleware/errorHandler');
+const logger = require('./middleware/logger');
+
 
 app.use(express.json());
 
@@ -24,6 +27,16 @@ db.once("open", () => {
   console.log("Conexion exitosa a la base de datos");
 });
 
+app.use((req, res, next) => {
+  logger.info({ method: req.method, url: req.url, body: req.body });
+  next();
+});
+
+app.use((err, req, res, next) => {
+  logger.error({ message: err.message, stack: err.stack });
+  res.status(500).send('Ocurrió un error');
+});
+
 app.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     return res.status(400).send({ message: "Datos inválidos" });
@@ -35,9 +48,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: "Error interno del servidor" });
 });
 
-app.use((req, res, next) => {
-  res.status(404).json({ message: "Recurso no encontrado" });
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
